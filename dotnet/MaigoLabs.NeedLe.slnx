@@ -1,0 +1,16 @@
+<Solution>
+
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+
+  <Project Path="MaigoLabs.NeedLe/MaigoLabs.NeedLe.csproj" />
+  <Project Path="MaigoLabs.NeedLe.Common/MaigoLabs.NeedLe.Common.csproj" />
+  <Project Path="MaigoLabs.NeedLe.Indexer/MaigoLabs.NeedLe.Indexer.csproj" />
+  <Project Path="MaigoLabs.NeedLe.Searcher/MaigoLabs.NeedLe.Searcher.csproj" />
+  <Project Path="MaigoLabs.NeedLe.Playground/MaigoLabs.NeedLe.Playground.csproj" />
+  <Project Path="MaigoLabs.NeedLe.Tests/MaigoLabs.NeedLe.Tests.csproj" />
+
+</Solution>

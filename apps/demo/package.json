@@ -1,0 +1,28 @@
+{
+  "name": "@maigolabs/needle-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc",
+    "dev": "vite --port 5172",
+    "build": "tsc -b && vite build"
+  },
+  "license": "AGPL-3.0",
+  "packageManager": "pnpm@10.20.0",
+  "private": true,
+  "dependencies": {
+    "@maigolabs/needle": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@iconify-json/svg-spinners": "^1.2.4",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "unocss": "^66.5.12",
+    "vite": "^7.2.4",
+    "vite-plugin-top-level-await": "^1.6.0"
+  }
+}

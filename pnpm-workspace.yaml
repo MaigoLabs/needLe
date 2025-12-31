@@ -1,0 +1,9 @@
+packages:
+  - packages/*
+  - apps/*
+
+nodeLinker: hoisted
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - unrs-resolver

@@ -1,0 +1,18 @@
+{
+  "editor.tabSize": 4,
+  "dotnet.defaultSolution": "dotnet/MaigoLabs.NeedLe.slnx",
+  "files.associations": {
+    "*.slnx": "xml"
+  },
+  "eslint.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.rules.customizations": [
+    {
+      "rule": "*",
+      "severity": "warn"
+    }
+  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue"]
+}

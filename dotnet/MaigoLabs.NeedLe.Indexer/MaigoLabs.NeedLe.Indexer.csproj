@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(ProjectName).Indexer</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>$(RootNamespace)</PackageId>
+    <!-- Don't include MeCab dictionaries in this package; let MeCab.DotNet provide them to end users -->
+    <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MaigoLabs.NeedLe.Common\MaigoLabs.NeedLe.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCampus.LatestCSharpFeatures" PrivateAssets="all" />
+    <PackageReference Include="hyjiacan.pinyin4net" />
+    <PackageReference Include="MeCab.DotNet" PrivateAssets="analyzers" />
+    <PackageReference Include="MyNihongo.KanaConverter" />
+    <PackageReference Include="OpenccNetLib" PrivateAssets="analyzers" />
+  </ItemGroup>
+
+</Project>

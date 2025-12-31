@@ -1,0 +1,19 @@
+{
+  "name": "@maigolabs/needle-playground-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc"
+  },
+  "license": "AGPL-3.0",
+  "packageManager": "pnpm@10.20.0",
+  "private": true,
+  "dependencies": {
+    "@maigolabs/needle": "workspace:*",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.4"
+  }
+}

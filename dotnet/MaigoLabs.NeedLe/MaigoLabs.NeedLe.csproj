@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>$(ProjectName)</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>$(RootNamespace)</PackageId>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>false</IncludeContentInPack>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
+    <PackageReadmeFile></PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MaigoLabs.NeedLe.Common\MaigoLabs.NeedLe.Common.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\MaigoLabs.NeedLe.Indexer\MaigoLabs.NeedLe.Indexer.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\MaigoLabs.NeedLe.Searcher\MaigoLabs.NeedLe.Searcher.csproj" PrivateAssets="none" />
+  </ItemGroup>
+
+  <!-- Directly add README to package files -->
+  <Target Name="AddReadmeToPackage" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_PackageFiles Include="..\README.md" PackagePath="/" />
+    </ItemGroup>
+    <PropertyGroup>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+  </Target>
+
+</Project>

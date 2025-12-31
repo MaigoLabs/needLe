@@ -1,0 +1,31 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWarn>CA1822</NoWarn>
+    <ProjectName>MaigoLabs.NeedLe</ProjectName>
+    <VSTestLogger>console%3Bverbosity=detailed</VSTestLogger>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <Version>1.0.0</Version>
+    <Authors>Menci</Authors>
+    <Description>Fuzzy search engine for small text pieces, with Chinese/Japanese pronunciation support</Description>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/MaigoLabs/needLe</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/MaigoLabs/needLe</PackageProjectUrl>
+    <PackageTags>search;fuzzy;cjk;chinese;japanese;pinyin;romaji</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

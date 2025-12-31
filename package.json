@@ -1,0 +1,36 @@
+{
+  "name": "@maigolabs/needle-root",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:packages": "pnpm -F=\"./packages/*\" run build",
+    "build:demo": "pnpm -F=\"./apps/demo\" build",
+    "dev:demo": "pnpm -F=\"./apps/demo\" dev",
+    "typecheck": "pnpm -rF=\"./packages/*\" -F=\"./apps/*\" typecheck",
+    "test": "pnpm -rF=\"./packages/*\" -F=\"./apps/*\" test",
+    "test:dotnet": "cd dotnet && dotnet test",
+    "lint": "eslint --cache --ext .",
+    "lint:fix": "eslint --cache --ext . --fix"
+  },
+  "license": "AGPL-3.0",
+  "packageManager": "pnpm@10.20.0",
+  "private": true,
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@stylistic/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "jiti": "^2.6.1",
+    "tsdown": "^0.18.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "unplugin-unused": "^0.5.6"
+  },
+  "dependencies": {
+    "@types/node": "^24.10.0"
+  }
+}

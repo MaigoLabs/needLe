@@ -1,0 +1,84 @@
+{
+  "name": "@maigolabs/needle",
+  "version": "1.0.1",
+  "description": "Fuzzy search engine for small text pieces, with Chinese/Japanese pronunciation support.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "prepare": "pnpm run build"
+  },
+  "license": "AGPL-3.0",
+  "homepage": "https://needle.maigo.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaigoLabs/needLe.git",
+    "directory": "packages/needle"
+  },
+  "bugs": "https://github.com/MaigoLabs/needLe/issues",
+  "keywords": [
+    "needle",
+    "search",
+    "fuzzy",
+    "cjk",
+    "chinese",
+    "japanese",
+    "pinyin",
+    "romaji"
+  ],
+  "author": "Menci <mencici@msn.com>",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./common": "./src/common/index.ts",
+    "./indexer": "./src/indexer/index.ts",
+    "./searcher": "./src/searcher/index.ts",
+    "./package.json": "./package.json"
+  },
+  "packageManager": "pnpm@10.20.0",
+  "dependencies": {
+    "@patdx/kuromoji": "^1.0.4",
+    "hepburn": "^1.2.2",
+    "opencc-js": "^1.0.5",
+    "pinyin-pro": "^3.27.0"
+  },
+  "devDependencies": {
+    "@types/hepburn": "^1.2.2",
+    "@types/jest": "^30.0.0",
+    "@types/opencc-js": "^1.0.3",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6"
+  },
+  "files": [
+    "README.md",
+    "dist",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+      ".": {
+       "types": "./dist/index.d.mts",
+       "default": "./dist/index.mjs"
+      },
+      "./common": {
+       "types": "./dist/common/index.d.mts",
+       "default": "./dist/common/index.mjs"
+      },
+      "./indexer": {
+       "types": "./dist/indexer/index.d.mts",
+       "default": "./dist/indexer/index.mjs"
+      },
+      "./searcher": {
+       "types": "./dist/searcher/index.d.mts",
+       "default": "./dist/searcher/index.mjs"
+      },
+      "./package.json": "./package.json"
+    }
+  }
+}

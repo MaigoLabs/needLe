@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="DotNetCampus.LatestCSharpFeatures" Version="13.0.1" />
+    <PackageVersion Include="hyjiacan.pinyin4net" Version="4.1.1" />
+    <PackageVersion Include="MeCab.DotNet" Version="1.2.0" />
+    <PackageVersion Include="MyNihongo.KanaConverter" Version="1.0.5" />
+    <PackageVersion Include="OpenccNetLib" Version="1.4.0" />
+    <PackageVersion Include="Telegram.Bot" Version="22.5.0" />
+  </ItemGroup>
+</Project>
