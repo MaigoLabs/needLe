@@ -133,12 +133,24 @@ const compareFinalResult = getComparerForTraits<SearchResult>({
   getLastToken: state => state.tokens[state.tokens.length - 1]!,
   getMatchRatio: state => state.matchRatio,
   getMatchRatioLevel: state => Math.round(state.matchRatio * 5),
-  nextComparer: (a, b) => a.documentText === b.documentText ? 0 : a.documentText < b.documentText ? -1 : 1,
 });
 
 const hasNonEmptyCharacters = (documentCodePoints: string[], start: number, end: number) => start !== end && !documentCodePoints.slice(start, end).every(char => /\s/.test(char));
 
-export const searchInvertedIndex = (invertedIndex: LoadedInvertedIndex, text: string): SearchResult[] => {
+export const searchInvertedIndex = (
+  invertedIndex: LoadedInvertedIndex,
+  text: string,
+  options?: {
+    /**
+     * Called when all other comparisons are equal.
+     */
+    nextComparer?: (documentIdA: number, documentIdB: number) => number;
+    /**
+     * If return falsy value for a document, it will be excluded from the final results.
+     */
+    filterDocument?: (documentId: number) => unknown;
+  },
+): SearchResult[] => {
   const { documents, documentCodePoints, tokenDefinitions, tries } = invertedIndex;
 
   const codePoints = [...toKatakana(normalizeByCodePoint(text))];
@@ -162,6 +174,7 @@ export const searchInvertedIndex = (invertedIndex: LoadedInvertedIndex, text: st
         ...getTrieNodeTokenIds(otherNode, reachingInputEnd),
       ]);
       for (const tokenId of matchingTokenIds) for (const { documentId, offsets } of tokenDefinitions[tokenId]!.references) {
+        if (options?.filterDocument && !options.filterDocument(documentId)) continue;
         const isTokenPrefixMatching = !romajiNode?.tokenIds.includes(tokenId) && !kanaNode?.tokenIds.includes(tokenId) && !otherNode?.tokenIds.includes(tokenId);
         const previousMatchesOfDocument = dp[l - 1]?.get(documentId);
         if (l !== 0 && !previousMatchesOfDocument) continue;
@@ -231,7 +244,13 @@ export const searchInvertedIndex = (invertedIndex: LoadedInvertedIndex, text: st
       matchRatio,
       matchRatioLevel,
     };
-  }).sort(compareFinalResult);
+  }).sort((a, b) => {
+    const compareResult = compareFinalResult(a, b);
+    if (compareResult !== 0) return compareResult;
+    return options?.nextComparer
+      ? options.nextComparer(a.documentId, b.documentId)
+      : a.documentText === b.documentText ? 0 : a.documentText < b.documentText ? -1 : 1;
+  });
 };
 
 // For debugging

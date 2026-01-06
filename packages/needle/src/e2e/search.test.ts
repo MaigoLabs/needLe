@@ -100,4 +100,38 @@ describe('search options', () => {
       expect(() => loadInvertedIndex(compressed)).toThrow();
     });
   });
+
+  describe('filterDocument option', () => {
+    it('should exclude filtered documents from results', () => {
+      const compressed = buildInvertedIndex(testDocuments, { kuromoji });
+      const invertedIndex = loadInvertedIndex(compressed);
+
+      // Search without filter - should find "宵の鳥" (documentId 2)
+      const resultsWithoutFilter = searchInvertedIndex(invertedIndex, 'yoi');
+      expect(resultsWithoutFilter.map(r => r.documentText)).toContain('宵の鳥');
+
+      // Search with filter excluding documentId 2
+      const resultsWithFilter = searchInvertedIndex(invertedIndex, 'yoi', {
+        filterDocument: id => id !== 2,
+      });
+      expect(resultsWithFilter.map(r => r.documentText)).not.toContain('宵の鳥');
+    });
+  });
+
+  describe('nextComparer option', () => {
+    it('should use custom comparer for final sorting when other criteria are equal', () => {
+      // Create documents that would have similar match scores
+      const similarDocs = ['テストA', 'テストB', 'テストC'];
+      const compressed = buildInvertedIndex(similarDocs, { kuromoji });
+      const invertedIndex = loadInvertedIndex(compressed);
+
+      // Search with reverse order comparer
+      const results = searchInvertedIndex(invertedIndex, 'テスト', {
+        nextComparer: (a, b) => b - a, // Reverse by documentId
+      });
+
+      // Should be in reverse documentId order (2, 1, 0) when other criteria equal
+      expect(results.map(r => r.documentId)).toEqual([2, 1, 0]);
+    });
+  });
 });

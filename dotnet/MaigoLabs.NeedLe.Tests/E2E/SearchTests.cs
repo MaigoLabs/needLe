@@ -139,3 +139,54 @@ public sealed class Search_BundleDocumentsOption_ThrowsWhenNoneProvidedTest : Ne
         Assert.Throws<ArgumentException>(() => InvertedIndexLoader.Load(compressed));
     }
 }
+
+public sealed class Search_FilterDocumentOption_ExcludesFilteredDocumentsTest : NeedleTestBase
+{
+    private static readonly string[] TestDocuments =
+    [
+        "ミーティア",
+        "エンドマークに希望と涙を添えて",
+        "宵の鳥",
+        "僕の和風本当上手",
+    ];
+
+    [Fact]
+    public void Execute()
+    {
+        var compressed = InvertedIndexBuilder.BuildInvertedIndex(TestDocuments, TokenizerOptions);
+        var invertedIndex = InvertedIndexLoader.Load(compressed);
+
+        // Search without filter - should find "宵の鳥" (documentId 2)
+        var resultsWithoutFilter = InvertedIndexSearcher.Search(invertedIndex, "yoi");
+        Assert.Contains("宵の鳥", resultsWithoutFilter.Select(r => r.DocumentText));
+
+        // Search with filter excluding documentId 2
+        var resultsWithFilter = InvertedIndexSearcher.Search(invertedIndex, "yoi", new InvertedIndexSearcherOptions
+        {
+            FilterDocument = id => id != 2
+        });
+        Assert.DoesNotContain("宵の鳥", resultsWithFilter.Select(r => r.DocumentText));
+    }
+}
+
+public sealed class Search_NextComparerOption_UsesCustomComparerTest : NeedleTestBase
+{
+    [Fact]
+    public void Execute()
+    {
+        // Create documents that would have similar match scores
+        var similarDocs = new[] { "テストA", "テストB", "テストC" };
+        var compressed = InvertedIndexBuilder.BuildInvertedIndex(similarDocs, TokenizerOptions);
+        var invertedIndex = InvertedIndexLoader.Load(compressed);
+
+        // Search with reverse order comparer
+        var results = InvertedIndexSearcher.Search(invertedIndex, "テスト", new InvertedIndexSearcherOptions
+        {
+            NextComparer = (a, b) => b - a // Reverse by documentId
+        });
+
+        // Should be in reverse documentId order (2, 1, 0) when other criteria equal
+        Assert.Equal([2, 1, 0], results.Select(r => r.DocumentId).ToArray());
+    }
+}
+
