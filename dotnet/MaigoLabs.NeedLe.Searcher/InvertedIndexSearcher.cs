@@ -167,6 +167,8 @@ public static class InvertedIndexSearcher
 
     public static SearchResult[] Search(LoadedInvertedIndex invertedIndex, string text, InvertedIndexSearcherOptions? options = null)
     {
+        if (string.IsNullOrWhiteSpace(text)) return [];
+
         var documents = invertedIndex.Documents;
         var documentCodePoints = invertedIndex.DocumentCodePoints;
         var tokenDefinitions = invertedIndex.TokenDefinitions;
@@ -184,9 +186,13 @@ public static class InvertedIndexSearcher
             for (var r = l; r < codePoints.Length && (romajiNode != null || kanaNode != null || otherNode != null); r++) // [l, r]
             {
                 var codePoint = codePoints[r];
-                romajiNode = romajiNode.TraverseStep(codePoint, IsIgnorableCodePoint(codePoint));
-                kanaNode = kanaNode.TraverseStep(codePoint, IsIgnorableCodePoint(codePoint));
-                otherNode = otherNode.TraverseStep(codePoint, IsIgnorableCodePoint(codePoint));
+                var nextRomajiNode = romajiNode.TraverseStep(codePoint, IsIgnorableCodePoint(codePoint));
+                var nextKanaNode = kanaNode.TraverseStep(codePoint, IsIgnorableCodePoint(codePoint));
+                var nextOtherNode = otherNode.TraverseStep(codePoint, IsIgnorableCodePoint(codePoint));
+                if (nextRomajiNode == romajiNode && nextKanaNode == kanaNode && nextOtherNode == otherNode) continue; // This code point is fully ignored on current state
+                romajiNode = nextRomajiNode;
+                kanaNode = nextKanaNode;
+                otherNode = nextOtherNode;
                 var reachingInputEnd = r == codePoints.Length - 1;
                 HashSet<int> matchingTokenIds =
                 [

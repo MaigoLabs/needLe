@@ -151,6 +151,8 @@ export const searchInvertedIndex = (
     filterDocument?: (documentId: number) => unknown;
   },
 ): SearchResult[] => {
+  if (!text.trim()) return [];
+
   const { documents, documentCodePoints, tokenDefinitions, tries } = invertedIndex;
 
   const codePoints = [...toKatakana(normalizeByCodePoint(text))];
@@ -163,9 +165,13 @@ export const searchInvertedIndex = (
     let otherNode: TrieNode | undefined = tries.other;
     for (let r = l; r < codePoints.length && (romajiNode || kanaNode || otherNode); r++) { // [l, r]
       const codePoint = codePoints[r]!;
-      romajiNode = traverseTrieStep(romajiNode, codePoint, IGNORABLE_CODE_POINTS);
-      kanaNode = traverseTrieStep(kanaNode, codePoint, IGNORABLE_CODE_POINTS);
-      otherNode = traverseTrieStep(otherNode, codePoint, IGNORABLE_CODE_POINTS);
+      const nextRomajiNode = traverseTrieStep(romajiNode, codePoint, IGNORABLE_CODE_POINTS);
+      const nextKanaNode = traverseTrieStep(kanaNode, codePoint, IGNORABLE_CODE_POINTS);
+      const nextOtherNode = traverseTrieStep(otherNode, codePoint, IGNORABLE_CODE_POINTS);
+      if (nextRomajiNode === romajiNode && nextKanaNode === kanaNode && nextOtherNode === otherNode) continue; // This code point is fully ignored on current state
+      romajiNode = nextRomajiNode;
+      kanaNode = nextKanaNode;
+      otherNode = nextOtherNode;
       const reachingInputEnd = r === codePoints.length - 1;
       const matchingTokenIds = new Set([
         // Allow suffix matching of romaji/other tokens if we're at the end of the input
