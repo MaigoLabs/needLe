@@ -71,3 +71,33 @@ describe('search', () => {
     expect(matchedTexts).toContain('宵の鳥');
   });
 });
+
+describe('search options', () => {
+  const testDocuments = [
+    'ミーティア',
+    'エンドマークに希望と涙を添えて',
+    '宵の鳥',
+    '僕の和風本当上手',
+  ];
+
+  describe('bundleDocuments option', () => {
+    it('should work when documents are not bundled and provided at load time', () => {
+      const compressed = buildInvertedIndex(testDocuments, { kuromoji, bundleDocuments: false });
+
+      // Documents should not be in the compressed index
+      expect(compressed.documents).toBeUndefined();
+
+      // Load with documents provided explicitly
+      const invertedIndex = loadInvertedIndex(compressed, testDocuments);
+
+      const results = searchInvertedIndex(invertedIndex, 'yoi');
+      expect(results.map(r => r.documentText)).toContain('宵の鳥');
+    });
+
+    it('should throw when loading without documents and none provided', () => {
+      const compressed = buildInvertedIndex(testDocuments, { kuromoji, bundleDocuments: false });
+
+      expect(() => loadInvertedIndex(compressed)).toThrow();
+    });
+  });
+});

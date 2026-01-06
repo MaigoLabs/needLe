@@ -7,8 +7,15 @@ import { TokenType } from '../common/types';
 const buildTypedTrie = (tokens: TokenDefinition[], typePredicate: (tokenType: TokenType) => boolean) =>
   buildTrie(tokens.filter(token => typePredicate(token.type)).map(token => [token.id, token.text]));
 
-export const buildInvertedIndex = (documents: string[], tokenizerOptions: TokenizerOptions) => {
-  const tokenizer = createTokenizer(tokenizerOptions);
+export const buildInvertedIndex = (documents: string[], options: TokenizerOptions & {
+  /**
+   * If false, the documents will not be bundled with the inverted index. You must pass documents explicitly when loading the index.
+   *
+   * @default true
+   */
+  bundleDocuments?: boolean;
+}) => {
+  const tokenizer = createTokenizer(options);
   const documentTokens = documents.map(document => tokenizer.tokenize(document));
 
   const tokenDefinitions = [...tokenizer.tokens.values()];
@@ -19,7 +26,7 @@ export const buildInvertedIndex = (documents: string[], tokenizerOptions: Tokeni
   graftTriePaths(kanaRoot, NORMALIZE_RULES_KANA_DAKUTEN);
 
   const invertedIndex: CompressedInvertedIndex = {
-    documents,
+    documents: (options.bundleDocuments ?? true) ? documents : undefined,
     tokenTypes: tokenDefinitions.map(token => token.type),
     tokenReferences: Array.from({ length: tokenDefinitions.length }, () => []),
     tries: {

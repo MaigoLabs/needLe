@@ -6,6 +6,15 @@ using MaigoLabs.NeedLe.Indexer.Trie;
 
 namespace MaigoLabs.NeedLe.Indexer;
 
+public class InvertedIndexBuilderOptions
+{
+    /// <summary>
+    /// If false, the documents will not be bundled with the inverted index. You must pass documents explicitly when loading the index.
+    /// Defaults to true.
+    /// </summary>
+    public bool BundleDocuments { get; set; } = true;
+}
+
 public static class InvertedIndexBuilder
 {
     private static TrieNode BuildTypedTrie(IEnumerable<TokenDefinition> tokenDefinitions, Func<TokenType, bool> typePredicate) =>
@@ -13,7 +22,10 @@ public static class InvertedIndexBuilder
             .Where(token => typePredicate(token.Type))
             .Select(token => (token.Id, CodePoints: token.Text.ToCodePoints())));
 
-    public static CompressedInvertedIndex BuildInvertedIndex(string[] documents, TokenizerOptions? tokenizerOptions = null)
+    public static CompressedInvertedIndex BuildInvertedIndex(
+        string[] documents,
+        TokenizerOptions? tokenizerOptions = null,
+        InvertedIndexBuilderOptions? invertedIndexBuilderOptions = null)
     {
         var tokenizer = new Tokenizer(tokenizerOptions);
         var documentTokens = documents.Select(tokenizer.Tokenize).ToArray();
@@ -27,7 +39,7 @@ public static class InvertedIndexBuilder
 
         var invertedIndex = new CompressedInvertedIndex
         {
-            documents = documents,
+            documents = (invertedIndexBuilderOptions?.BundleDocuments ?? true) ? documents : null,
             tokenTypes = [.. tokenDefinitions.Select(token => (int)token.Type)],
             tokenReferences = [.. tokenDefinitions.Select(_ => new List<int[]>())],
             tries = new CompressedInvertedIndexTries

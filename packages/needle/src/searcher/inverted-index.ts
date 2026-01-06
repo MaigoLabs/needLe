@@ -28,8 +28,9 @@ export interface LoadedInvertedIndex {
   };
 }
 
-export const loadInvertedIndex = (compressed: CompressedInvertedIndex): LoadedInvertedIndex => {
-  const documents = compressed.documents;
+export const loadInvertedIndex = (compressed: CompressedInvertedIndex, documents?: string[]): LoadedInvertedIndex => {
+  documents ??= compressed.documents;
+  if (!documents) throw new Error('Loading an inverted index without documents bundled requires documents to be provided explicitly.');
   const documentCodePoints = documents.map(document => [...document]);
 
   const romajiTrie = deserializeTrie(compressed.tries.romaji);

@@ -20,7 +20,7 @@ export interface OffsetSpan {
 }
 
 export type CompressedInvertedIndex = {
-  documents: string[];
+  documents?: string[];
   tokenTypes: TokenType[];
   tokenReferences: number[][][]; // tokenId -> [documentId, start1, end1, start2, end2, ...][]
   tries: {

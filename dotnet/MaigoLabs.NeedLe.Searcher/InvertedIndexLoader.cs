@@ -33,9 +33,10 @@ public class LoadedInvertedIndex
 
 public class InvertedIndexLoader
 {
-    public static LoadedInvertedIndex Load(CompressedInvertedIndex compressed)
+    public static LoadedInvertedIndex Load(CompressedInvertedIndex compressed, string[]? documents = null)
     {
-        var documents = compressed.documents;
+        documents ??= compressed.documents;
+        if (documents == null) throw new ArgumentException("Loading an inverted index without documents bundled requires documents to be provided explicitly.");
         var documentCodePoints = documents.Select(document => document.ToCodePoints().ToArray()).ToArray();
 
         var romajiTrie = TrieDeserializer.Deserialize(compressed.tries.romaji);

@@ -89,3 +89,53 @@ public sealed class Search_MatchesRomajiInputToKanaDocumentsTest : NeedleTestBas
     }
 }
 
+public sealed class Search_BundleDocumentsOption_WorksWhenNotBundledTest : NeedleTestBase
+{
+    private static readonly string[] TestDocuments =
+    [
+        "ミーティア",
+        "エンドマークに希望と涙を添えて",
+        "宵の鳥",
+        "僕の和風本当上手",
+    ];
+
+    [Fact]
+    public void Execute()
+    {
+        var compressed = InvertedIndexBuilder.BuildInvertedIndex(
+            TestDocuments,
+            TokenizerOptions,
+            new InvertedIndexBuilderOptions { BundleDocuments = false });
+
+        // Documents should not be in the compressed index
+        Assert.Null(compressed.documents);
+
+        // Load with documents provided explicitly
+        var invertedIndex = InvertedIndexLoader.Load(compressed, TestDocuments);
+
+        var results = InvertedIndexSearcher.Search(invertedIndex, "yoi");
+        Assert.Contains("宵の鳥", results.Select(r => r.DocumentText));
+    }
+}
+
+public sealed class Search_BundleDocumentsOption_ThrowsWhenNoneProvidedTest : NeedleTestBase
+{
+    private static readonly string[] TestDocuments =
+    [
+        "ミーティア",
+        "エンドマークに希望と涙を添えて",
+        "宵の鳥",
+        "僕の和風本当上手",
+    ];
+
+    [Fact]
+    public void Execute()
+    {
+        var compressed = InvertedIndexBuilder.BuildInvertedIndex(
+            TestDocuments,
+            TokenizerOptions,
+            new InvertedIndexBuilderOptions { BundleDocuments = false });
+
+        Assert.Throws<ArgumentException>(() => InvertedIndexLoader.Load(compressed));
+    }
+}
